@@ -1,0 +1,20 @@
+{
+  "description": "A water meter with display of quantities of liquid that have already flowed through. Animated cogs indicate a change in the values.",
+  "main": "./dist/hass-fluid-flow-card.js",
+  "dependencies": {
+    "custom-card-helpers": "^1.9.0",
+    "lit": "^2.7.4"
+  },
+  "devDependencies": {
+    "enhanced-resolve": "^5.14.1",
+    "style-loader": "^3.3.3",
+    "css-loader": "^6.8.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1",
+    "ts-loader": "^9.4.3"
+  },
+  "scripts": {
+    "watch": "webpack --progress --watch"
+  }
+}

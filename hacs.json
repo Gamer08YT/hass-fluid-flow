@@ -1,0 +1,6 @@
+{
+  "name": "Fluid Flow",
+  "filename": "hass-fluid-flow-card.js",
+  "homeassistant": "2021.11.0",
+  "render_readme": true
+}
