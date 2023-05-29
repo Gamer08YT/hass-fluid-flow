@@ -1,4 +1,5 @@
 {
+  "name": "Fluid Flow Card",
   "description": "A water meter with display of quantities of liquid that have already flowed through. Animated cogs indicate a change in the values.",
   "main": "./dist/hass-fluid-flow-card.js",
   "dependencies": {
