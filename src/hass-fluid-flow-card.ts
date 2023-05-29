@@ -1,7 +1,13 @@
 import {HomeAssistant} from "custom-card-helpers";
 import {customElement} from 'lit/decorators.js';
-import "./counter.css";
+// @ts-ignore
 import {Counter} from "./counter";
+
+// @ts-ignore
+import counter from "./counter.css";
+// @ts-ignore
+import styles from "./meter-card.css";
+import {tsTsxJsJsxRegex} from "ts-loader/dist/constants";
 
 // @ts-ignore
 @customElement("hass-fluid-flow-card")
@@ -21,6 +27,9 @@ class FluidFlowCard extends HTMLElement {
     // Store last Percentage.
     private percentIO = 0;
 
+    // Store Counter.
+    private counterIO: Counter[] = [];
+
     /**
      * Callback for Value Change / Initialisation in Hass.
      * @param hassIO
@@ -31,16 +40,15 @@ class FluidFlowCard extends HTMLElement {
 
         // Set Inner if not set.
         if (this.innerHTML == undefined || this.innerHTML == null || this.innerHTML == "") {
-            // Set Style Properties.
             //this.setStyleElement();
-            this.loadCSS("/local/src/counter.css");
-
             this.innerHTML = `
         <ha-card header="` + this.configIO.title + `">
+        <style>` + styles + `</style>
+        <style>` + counter + `</style>
          <div class="meter-container" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-content: center; align-items: center;">
             <div class="meter-inner" style="position: relative;">
-                <img style="height: 15rem; width: auto; position: relative;" src="/local/images/meter.svg" />
-                <div class="meter-counter" style="position: absolute; bottom: 50%;">
+                <img style="height: auto; width: 100%; position: relative;" src="/local/images/meter.svg" />
+                <div class="meter-counter">
                     <div class="counter"></div>
                 </div>
                 <div class="meter-wheel" style="position: absolute; bottom: 30%; width: 22%; height: 22%; left: 33%;">
@@ -49,6 +57,9 @@ class FluidFlowCard extends HTMLElement {
             </div>
          </div>
         </ha-card`;
+
+            // Initialize Counter.
+            this.createCounters();
         }
 
 
@@ -90,19 +101,9 @@ class FluidFlowCard extends HTMLElement {
             }, 500);
         }
 
-        const counterIO = new Counter(this.getCounterElement(0));
-
         // Set Value if not null.
         if (this.valueIO == null)
             this.valueIO = valueIO;
-    }
-
-    loadCSS(url) {
-        const link = document.createElement("link");
-        link.type = "text/css";
-        link.rel = "stylesheet";
-        link.href = url;
-        document.head.appendChild(link);
     }
 
     /**
@@ -134,7 +135,8 @@ class FluidFlowCard extends HTMLElement {
      * @private
      */
     private updateElements(valueIO: any) {
-
+        // Update Counters.
+        this.updateCounters(valueIO);
     }
 
     /**
@@ -155,7 +157,18 @@ class FluidFlowCard extends HTMLElement {
     }
 
     private getCounterElement(idIO = 0) {
-        return this.getCounterContainer().getElementsByClassName("counter")[idIO];
+        let counterIO = this.getCounterContainer().getElementsByClassName("counter")[idIO];
+
+        // Add new Div if not exits.
+        if (counterIO == undefined) {
+            counterIO = document.createElement("div");
+            counterIO.classList.add("counter");
+
+            // Append Element.
+            this.getCounterContainer().appendChild(counterIO);
+        }
+
+        return counterIO;
     }
 
     private getCounterContainer() {
@@ -190,8 +203,82 @@ class FluidFlowCard extends HTMLElement {
           content: "hey";
         }`;
 
-        if (document.getElementById("meter-style") == undefined)
-            document.append(styleIO);
+        this.appendChild(styleIO);
+    }
+
+    /**
+     * Create Counters.
+     * @private
+     */
+    private createCounters(countIO = 7) {
+        // Create X Counters.
+        for (let incrementIO = 0; incrementIO < countIO; incrementIO++) {
+            // Print Debug Message.
+            console.log("Add Counter " + incrementIO + ".");
+
+            // Create new Object.
+            const counterIO = new Counter(this.getCounterElement(incrementIO));
+
+            // Disable Mouse Wheel.
+            counterIO.getOptions().mousewheel = false;
+
+            // Create new Counter Instance.
+            this.counterIO[incrementIO] = counterIO;
+        }
+    }
+
+    /**
+     * Convert Value to Digit String.
+     * @param inputIO
+     * @param sizeIO
+     */
+    convertDigit(inputIO, sizeIO = 7) {
+        // Zahl in String umwandeln
+        var numberString = Number.parseInt(inputIO).toString();
+
+        // Print Debug Message.
+        console.log("Convert " + inputIO + " to " + numberString);
+
+        // Überprüfen, ob der String bereits sechs Ziffern hat
+        if (numberString.length >= sizeIO) {
+            return numberString.slice(0, sizeIO); // Die ersten sechs Ziffern zurückgeben
+        } else {
+            // Anzahl der fehlenden Ziffern berechnen
+            var missingDigits = sizeIO - numberString.length;
+
+            // Nullen vorne anhängen, um den String auf sechs Ziffern zu bringen
+            for (var i = 0; i < missingDigits; i++) {
+                numberString = '0' + numberString;
+            }
+
+            return numberString;
+        }
+    }
+
+
+    private updateCounters(valueIO: any, countIO = 7) {
+        // Convert Value to X Digits.
+        const digitIO = this.convertDigit(valueIO, countIO);
+
+        // Update X Counters.
+        for (let incrementIO = 0; incrementIO < countIO; incrementIO++) {
+            // Print Debug Message.
+            console.log("Update Counter " + incrementIO + " to " + digitIO[incrementIO] + ".");
+
+            // Update in Timeout to give a bit of Animation.
+            // Last -> First
+            setTimeout(() => {
+                // Get Counter by Column.
+                const counterIO = this.counterIO[incrementIO];
+
+                // Get Digit Value.
+                const itemIO = Number.parseInt(digitIO[incrementIO]);
+
+                // Update Counter Position.
+                counterIO.moveTo(itemIO);
+                //this.counterIO[incrementIO].moveTo(digitIO[incrementIO]);
+            }, (countIO - incrementIO) * 250);
+        }
     }
 }
 

@@ -56,6 +56,10 @@ export class Counter {
 
     }
 
+    getOptions() {
+        return this.options;
+    }
+
     setValue(value) {
         var pos = this.values.indexOf(value);
         if (pos >= 0) return this.setPos(pos);

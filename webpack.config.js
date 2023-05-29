@@ -19,7 +19,7 @@ module.exports = {
             {parser: {amd: false}},
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: ['raw-loader']
             }
         ],
     },
