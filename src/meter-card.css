@@ -1,10 +1,20 @@
+.meter-container {
+    /* display: flex; */
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin: 5%;
+}
+
 .meter-counter {
     position: absolute;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    bottom: 63%;
-    height: 10%;
+    bottom: 62%;
+    height: 11%;
     width: 35%;
-    left: 32.5%;
+    left: 33.5%;
 }

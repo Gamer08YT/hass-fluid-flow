@@ -45,7 +45,7 @@ class FluidFlowCard extends HTMLElement {
         <ha-card header="` + this.configIO.title + `">
         <style>` + styles + `</style>
         <style>` + counter + `</style>
-         <div class="meter-container" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-content: center; align-items: center;">
+         <div class="meter-container">
             <div class="meter-inner" style="position: relative;">
                 <img style="height: auto; width: 100%; position: relative;" src="/local/images/meter.svg" />
                 <div class="meter-counter">
