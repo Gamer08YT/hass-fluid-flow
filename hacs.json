@@ -1,6 +1,6 @@
 {
   "name": "Fluid Flow",
-  "filename": "./dist/hass-fluid-flow-card.ts.js",
+  "filename": "./dist/hass-fluid-flow-card.js",
   "homeassistant": "2021.11.0",
   "render_readme": true,
   "content_in_root": false
