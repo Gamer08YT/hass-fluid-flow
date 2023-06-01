@@ -7,14 +7,19 @@ const webpack = require("webpack");
 
 module.exports = {
     entry: fileNames,
-    mode: "development",
+    mode: "production",
+    optimization: {
+        minimize: false
+    },
     devtool: 'inline-source-map',
     module: {
         rules: [
             {
-                // https://datatables.net/forums/discussion/50003/datatables-with-webpack-fn-datatable-undefined
-                // Disable AMD Parser.
-                test: /\.([cm]?ts|tsx)$/, loader: "ts-loader", parser: {amd: false}
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'ts-loader',
+                },
             },
             {parser: {amd: false}},
             {
@@ -43,7 +48,12 @@ module.exports = {
         })
     ],
     output: {
+        library: "FluidFlowCard",
+        libraryTarget: "umd",
         filename: '[name].js',
         path: path.resolve(__dirname, './dist')
+    },
+    externals: {
+        './hacs.js': 'hacs', // Der Pfad zur separaten Datei und der Name, unter dem sie als externer Code referenziert wird
     },
 };

@@ -14,7 +14,10 @@
     "typescript": "^5.0.4",
     "webpack": "^5.84.1",
     "webpack-cli": "^5.1.1",
-    "raw-loader": "^4.0.2"
+    "raw-loader": "^4.0.2",
+    "babel-loader": "^9.1.2",
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.4"
   },
   "scripts": {
     "watch": "webpack --progress --watch"

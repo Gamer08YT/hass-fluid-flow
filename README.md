@@ -4,6 +4,10 @@
 
 ![img.png](images/preview.gif)
 
+## Todo / Planned:
+- Add better Meter Image (Real 2D Image of a Water Meter)
+- Optimize Animations
+
 ## Configuration
 
 A graphical user interface (GUI) to configure the card is currently not available.
